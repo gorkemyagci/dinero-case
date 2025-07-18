@@ -1,4 +1,9 @@
-import type { RecordType } from "@/lib/types";
+import type {
+  RecordType,
+  ApiResponse,
+  ApiSuccessResponse,
+  ApiErrorResponse,
+} from "@/lib/types";
 import { removeUndefined } from "@/lib/utils/modify";
 import axios from "axios";
 import type { AxiosRequestConfig } from "axios";
@@ -6,12 +11,16 @@ import type { AxiosRequestConfig } from "axios";
 export const SERVICE_URL = import.meta.env.VITE_API_URL;
 
 export class CustomError extends Error {
-  public info: any;
+  public info: ApiErrorResponse;
 
-  constructor(message: string, info?: any) {
+  constructor(message: string, info?: ApiErrorResponse) {
     super(message);
     this.name = "CustomError";
-    this.info = info || {};
+    this.info = info || {
+      status: 500,
+      title: "Internal Server Error",
+      message: "Bir hata oluştu",
+    };
   }
 }
 
@@ -35,7 +44,7 @@ export async function api({
   data = undefined,
   params = {},
   token,
-}: API_PROPS) {
+}: API_PROPS): Promise<ApiResponse> {
   const jwtToken = token || "";
 
   const config: AxiosRequestConfig = {
@@ -52,27 +61,102 @@ export async function api({
 
   try {
     const response = await axios(config);
-    if (response.status === 204) return { success: true };
-    if (response.status === 403 || response.status === 401) {
-      throw new CustomError("Yetkiniz bulunmuyor.", {
-        status: response.status,
+
+    if (response.status === 204) {
+      return {
+        status: 204,
+        title: "Success",
+        message: "İşlem başarıyla tamamlandı",
+      };
+    }
+
+    if (response.status === 401) {
+      throw new CustomError(
+        "Oturum süreniz dolmuş. Lütfen tekrar giriş yapın.",
+        {
+          status: 401,
+          title: "Unauthorized",
+          message: "Oturum süreniz dolmuş. Lütfen tekrar giriş yapın.",
+        }
+      );
+    }
+
+    if (response.status === 403) {
+      throw new CustomError("Bu işlem için yetkiniz bulunmuyor.", {
+        status: 403,
+        title: "Forbidden",
+        message: "Bu işlem için yetkiniz bulunmuyor.",
       });
     }
-    if (!response.status || response.status < 200 || response.status >= 300) {
-      throw new CustomError(response.data?.message || "API Error", {
+
+    if (response.status === 0 || response.status === 404) {
+      throw new CustomError(
+        "Sunucuya bağlanılamıyor. Lütfen daha sonra tekrar deneyin.",
+        {
+          status: response.status || 404,
+          title: "Connection Error",
+          message: "Sunucuya bağlanılamıyor. Lütfen daha sonra tekrar deneyin.",
+        }
+      );
+    }
+
+    if (response.status < 200 || response.status >= 300) {
+      const errorData = response.data as ApiErrorResponse;
+      throw new CustomError(errorData?.message || "Bir hata oluştu", {
         status: response.status,
-        data: response.data,
+        title: errorData?.title || "Error",
+        message: errorData?.message || "Bir hata oluştu",
+        errors: errorData?.errors,
       });
     }
-    return response.data;
+
+    const successData = response.data as ApiSuccessResponse;
+    return {
+      status: response.status,
+      title: successData?.title || "Success",
+      message: successData?.message || "İşlem başarıyla tamamlandı",
+      data: successData?.data,
+    };
   } catch (err) {
     if (err instanceof CustomError) throw err;
+
     if (axios.isAxiosError(err)) {
-      throw new CustomError(err.message, {
-        status: err.response?.status,
-        data: err.response?.data,
+      if (err.code === "NETWORK_ERROR" || err.code === "ERR_NETWORK") {
+        throw new CustomError(
+          "Ağ bağlantısı hatası. Lütfen internet bağlantınızı kontrol edin.",
+          {
+            status: 0,
+            title: "Network Error",
+            message:
+              "Ağ bağlantısı hatası. Lütfen internet bağlantınızı kontrol edin.",
+          }
+        );
+      }
+
+      if (err.code === "ECONNABORTED") {
+        throw new CustomError(
+          "İstek zaman aşımına uğradı. Lütfen tekrar deneyin.",
+          {
+            status: 408,
+            title: "Request Timeout",
+            message: "İstek zaman aşımına uğradı. Lütfen tekrar deneyin.",
+          }
+        );
+      }
+
+      const errorData = err.response?.data as ApiErrorResponse;
+      throw new CustomError(errorData?.message || err.message, {
+        status: err.response?.status || 500,
+        title: errorData?.title || "API Error",
+        message: errorData?.message || err.message,
+        errors: errorData?.errors,
       });
     }
-    throw err;
+
+    throw new CustomError("Beklenmeyen bir hata oluştu.", {
+      status: 500,
+      title: "Unknown Error",
+      message: "Beklenmeyen bir hata oluştu.",
+    });
   }
 }

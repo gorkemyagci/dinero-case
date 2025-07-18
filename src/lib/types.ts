@@ -12,3 +12,25 @@ export interface ApplicationForm {
   address: string;
   eMail: string;
 }
+
+export interface ApiSuccessResponse<T = any> {
+  status: number;
+  title: string;
+  message: string;
+  data?: T;
+}
+
+export interface ApiErrorResponse {
+  status: number;
+  title: string;
+  message: string;
+  errors?: Record<string, string[]>;
+}
+
+export interface ApiResponse<T = any> {
+  status: number;
+  title: string;
+  message: string;
+  data?: T;
+  errors?: Record<string, string[]>;
+}

@@ -48,6 +48,16 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --dinero-primary: #3F2F70;
+  --dinero-primary-hover: #4c388a;
+  --dinero-background: #F5F5FF;
+  --dinero-text-primary: #3F2F70;
+  --dinero-text-secondary: #5A5A59;
+  --dinero-text-dark: #1F2937;
+  --dinero-border: #E4E1EC;
+  --dinero-border-light: #EAEAFF;
+  --dinero-white: #FFFFFF;
+  --dinero-input-hover: #FFFFFF;
 }
 
 @theme inline {
@@ -86,6 +96,16 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-dinero-primary: var(--dinero-primary);
+  --color-dinero-primary-hover: var(--dinero-primary-hover);
+  --color-dinero-background: var(--dinero-background);
+  --color-dinero-text-primary: var(--dinero-text-primary);
+  --color-dinero-text-secondary: var(--dinero-text-secondary);
+  --color-dinero-text-dark: var(--dinero-text-dark);
+  --color-dinero-border: var(--dinero-border);
+  --color-dinero-border-light: var(--dinero-border-light);
+  --color-dinero-white: var(--dinero-white);
+  --color-dinero-input-hover: var(--dinero-input-hover);
 }
 
 .dark {
@@ -120,6 +140,16 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  --dinero-primary: #8B7BC0;
+  --dinero-primary-hover: #9A8BCF;
+  --dinero-background: #1A1A2E;
+  --dinero-text-primary: #FFFFFF;
+  --dinero-text-secondary: #E0E0E0;
+  --dinero-text-dark: #FFFFFF;
+  --dinero-border: #3A3A5A;
+  --dinero-border-light: #4A4A6A;
+  --dinero-white: #2A2A3E;
+  --dinero-input-hover: #3A3A5A;
 }
 
 @layer base {
@@ -243,4 +273,14 @@
   font-weight: 300;
   font-style: italic;
   font-display: swap;
+}
+
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

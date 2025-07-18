@@ -43,8 +43,8 @@ export function InputElement({
         >
           {label && (
             <FormLabel>
-              <div className="truncate z-50 justify-start rounded-full items-center border border-[#F5F5FF] absolute top-2 bg-[#F5F5FF] w-fit h-6 px-[14px] flex left-8 group-hover:bg-white group-hover:border group-hover:border-[#EAEAFF] transition-colors duration-200">
-                <span className="text-sm font-normal leading-3 text-[#5A5A59]">
+              <div className="truncate z-50 justify-start rounded-full items-center border border-dinero-background absolute top-2 bg-dinero-background group-focus-within:bg-dinero-input-hover w-fit h-6 px-[14px] flex left-8 group-hover:bg-dinero-input-hover group-hover:border group-hover:border-dinero-border-light transition-colors duration-200">
+                <span className="text-sm font-normal leading-3 text-dinero-text-secondary">
                   {label}
                 </span>
               </div>
@@ -52,7 +52,7 @@ export function InputElement({
           )}
           <FormControl>
             <div className="relative w-full transition-colors py-1 duration-200">
-              {icon && <div className="absolute top-1/2 -translate-y-1/2 left-4">{icon}</div>}
+              {icon && <div className="absolute top-1/2 -translate-y-1/2 left-4 text-dinero-text-secondary">{icon}</div>}
               <Input
                 placeholder={placeholder}
                 disabled={disabled}
@@ -62,7 +62,7 @@ export function InputElement({
                 {...field}
                 {...props}
                 onChange={field.onChange}
-                className="group-hover:bg-white pl-12"
+                className="group-hover:bg-dinero-input-hover pl-12"
               />
             </div>
           </FormControl>

@@ -62,8 +62,8 @@ export function PhoneNumber({
         >
           {label && (
             <FormLabel>
-              <div className="truncate z-50 justify-start rounded-full items-center border border-[#F5F5FF] absolute top-2 bg-[#F5F5FF] w-fit h-6 px-[14px] flex left-8 group-hover:bg-white group-hover:border group-hover:border-[#EAEAFF] transition-colors duration-200 group-focus-within:bg-white group-focus-within:border group-focus-within:border-[#EAEAFF]">
-                <span className="text-sm font-normal leading-3 text-[#5A5A59]">
+              <div className="truncate z-50 justify-start rounded-full items-center border border-dinero-background absolute top-2 bg-dinero-background w-fit h-6 px-[14px] flex left-8 group-hover:bg-dinero-input-hover group-hover:border group-hover:border-dinero-border-light transition-colors duration-200 group-focus-within:bg-dinero-input-hover group-focus-within:border group-focus-within:border-dinero-border-light">
+                <span className="text-sm font-normal leading-3 text-dinero-text-secondary">
                   {label}
                 </span>
               </div>
@@ -85,7 +85,7 @@ export function PhoneNumber({
                   field.onChange(digits);
                 }}
                 value={displayValue}
-                className="group-hover:bg-white pl-12"
+                className="group-hover:bg-dinero-input-hover pl-12"
                 maxLength={15}
               />
             </div>

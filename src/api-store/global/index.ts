@@ -1,9 +1,9 @@
-import type { ApplicationForm } from "@/lib/types";
+import type { ApplicationForm, ApiResponse } from "@/lib/types";
 import { api } from "../index";
 
 const basePath = "/global";
 
-export const provincesOrDistricts = async (provinceId?: number) => {
+export const provincesOrDistricts = async (provinceId?: number): Promise<ApiResponse> => {
   const response = await api({
     path: `${basePath}/getprovincesordistricts`,
     method: "POST",
@@ -14,11 +14,11 @@ export const provincesOrDistricts = async (provinceId?: number) => {
   return response;
 };
 
-export const submit = async (values: ApplicationForm) => {
+export const submit = async (values: ApplicationForm): Promise<ApiResponse> => {
   const response = await api({
     path: `/case`,
     method: "POST",
     data: values,
   });
   return response;
-}
+};

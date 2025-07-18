@@ -41,8 +41,8 @@ export function SalaryExpectation({
         >
           {label && (
             <FormLabel>
-              <div className="truncate z-50 justify-start rounded-full items-center border border-[#F5F5FF] absolute top-2 bg-[#F5F5FF] w-fit h-6 px-[14px] flex left-8 group-hover:bg-white group-hover:border group-hover:border-[#EAEAFF] transition-colors duration-200">
-                <span className="text-sm font-normal leading-3 text-[#5A5A59]">
+              <div className="truncate z-50 justify-start rounded-full items-center border border-dinero-background absolute top-2 bg-dinero-background w-fit h-6 px-[14px] flex left-8 group-hover:bg-dinero-input-hover group-hover:border group-hover:border-dinero-border-light transition-colors duration-200">
+                <span className="text-sm font-normal leading-3 text-dinero-text-secondary">
                   {label}
                 </span>
               </div>
@@ -50,7 +50,7 @@ export function SalaryExpectation({
           )}
           <FormControl>
             <div className="relative w-full transition-colors py-1 duration-200">
-              <div className="absolute top-1/2 -translate-y-1/2 left-4 text-[#3F2F70] text-lg font-bold select-none pointer-events-none">
+              <div className="absolute top-1/2 -translate-y-1/2 left-4 text-dinero-text-primary text-lg font-bold select-none pointer-events-none">
                 <Icons.wallet />
               </div>
               <Input
@@ -66,7 +66,7 @@ export function SalaryExpectation({
                   const raw = e.target.value.replace(/\D/g, '').slice(0, 7);
                   form.setValue(name, raw);
                 }}
-                className="group-hover:bg-white pl-12 pr-12"
+                className="group-hover:bg-dinero-input-hover pl-12 pr-12"
                 maxLength={11}
               />
             </div>
