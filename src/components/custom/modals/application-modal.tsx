@@ -30,7 +30,7 @@ const ApplicationModal = ({ children, jobTitle }: ApplicationModalProps) => {
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent
         showCloseButton={false}
-        className="bg-dinero-background max-w-sm sm:max-w-lg md:max-w-3xl lg:max-w-4xl w-full flex flex-col gap-5 2xl:gap-14 px-4 py-4 sm:px-6 sm:py-6 md:px-10 md:py-10 rounded-xl md:rounded-2xl max-h-[90vh] lg:max-h-[95vh] overflow-y-auto scrollbar-hide"
+        className="bg-dinero-background max-w-full sm:max-w-lg md:max-w-3xl lg:max-w-4xl w-full flex flex-col gap-5 2xl:gap-14 px-4 py-4 sm:px-6 sm:py-6 md:px-10 md:py-10 md:rounded-2xl max-h-screen rounded-none lg:max-h-[95vh] overflow-y-auto scrollbar-hide"
       >
         <DialogHeader
           className="flex flex-col md:flex-row gap-4 md:gap-[3.75rem] items-start md:items-center justify-between w-full"
@@ -43,7 +43,7 @@ const ApplicationModal = ({ children, jobTitle }: ApplicationModalProps) => {
               Aşağıdaki bilgileri doldurarak başvurunuzu tamamlayabilirsiniz.
             </p>
           </div>
-          <div className="flex flex-col gap-3 items-end">
+          <div className="flex flex-row gap-3 items-end md:flex-col">
             <button
               onClick={toggleDarkMode}
               className="rounded-full p-2 bg-dinero-white cursor-pointer border border-dinero-border-light hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
