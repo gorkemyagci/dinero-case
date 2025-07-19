@@ -10,7 +10,7 @@ import SalaryExpectation from "@/components/custom/form-elements/salary-expectat
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import CommandMenu from "@/components/custom/form-elements/commond";
+import CommandMenu from "@/components/custom/form-elements/command";
 import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
 import { submit } from "@/api-store/global";
