@@ -3,7 +3,7 @@ import { api } from "../index";
 
 const basePath = "/v1";
 
-const DINERO_API_URL = import.meta.env.VITE_DINERO_API_URL || "https://cms.dinero.com.tr/api"
+const DINERO_API_URL = import.meta.env.VITE_DINERO_API_URL || "https://cms.dinero.com.tr"
 
 export const provincesOrDistricts = async (
   provinceId?: number
