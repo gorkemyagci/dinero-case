@@ -20,7 +20,6 @@ import Lottie from "lottie-react";
 import loadingAnimation from "@/assets/animations/loadingAnimation.json";
 import successAnimation from "@/assets/animations/successAnimation.json";
 import { useState } from "react";
-import { getCities, getDistrictsByCity } from "@/lib/mockData";
 
 const formSchema = z.object({
   firstName: z.string().min(1),
@@ -73,9 +72,6 @@ const ApplyForm = ({ address }: { address: boolean }) => {
     },
     enabled: !!selectedCityId,
   });
-
-  console.log(cities);
-  console.log(districts);
 
   const { mutate: submitMutation, isPending } = useMutation({
     mutationFn: async (data: ApplicationForm) => await submit(data),
