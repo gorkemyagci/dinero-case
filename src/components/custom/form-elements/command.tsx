@@ -66,9 +66,10 @@ export function CommandMenu({
     return () => document.removeEventListener("mousedown", handleClick);
   }, [open]);
 
-  const filtered = data.filter((item) =>
-    item.toLowerCase().includes(search.toLowerCase())
-  );
+  const filtered =
+    data?.filter((item) =>
+      item.label.toLowerCase().includes(search.toLowerCase())
+    ) || [];
 
   return (
     <FormField
@@ -91,12 +92,19 @@ export function CommandMenu({
             </FormLabel>
           )}
           <FormControl>
-            <div ref={containerRef} className="relative w-full transition-colors py-1 duration-200">
-              {icon && <div className="absolute top-1/2 -translate-y-1/2 left-4">{icon}</div>}
+            <div
+              ref={containerRef}
+              className="relative w-full transition-colors py-1 duration-200"
+            >
+              {icon && (
+                <div className="absolute top-1/2 -translate-y-1/2 left-4">
+                  {icon}
+                </div>
+              )}
               <div onClick={() => setOpen(true)} className="cursor-pointer">
                 <input
                   value={search}
-                  onChange={e => {
+                  onChange={(e) => {
                     setSearch(e.target.value);
                     setOpen(true);
                   }}
@@ -116,15 +124,15 @@ export function CommandMenu({
                         <CommandGroup heading="Öneriler">
                           {filtered.map((item) => (
                             <CommandItem
-                              key={item}
+                              key={item.value}
                               onSelect={() => {
-                                form.setValue(name, item);
+                                form.setValue(name, item.value);
                                 setOpen(false);
-                                setSearch(item);
-                                onSelect?.(item);
+                                setSearch(item.label);
+                                onSelect?.(item.value);
                               }}
                             >
-                              {item}
+                              {item.label}
                             </CommandItem>
                           ))}
                         </CommandGroup>

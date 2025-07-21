@@ -12,8 +12,8 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import CommandMenu from "@/components/custom/form-elements/command";
 import { toast } from "sonner";
-import { useMutation } from "@tanstack/react-query";
-import { submit } from "@/api-store/global";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { provincesOrDistricts, submit } from "@/api-store/global";
 import type { CustomError } from "@/api-store";
 import type { ApplicationForm } from "@/lib/types";
 import Lottie from "lottie-react";
@@ -54,9 +54,28 @@ const ApplyForm = ({ address }: { address: boolean }) => {
 
   const [showSuccess, setShowSuccess] = useState(false);
   const [selectedCity, setSelectedCity] = useState<string>("");
+  const [selectedCityId, setSelectedCityId] = useState<number | null>(null);
 
-  const cities = getCities();
-  const districts = selectedCity ? getDistrictsByCity(selectedCity) : [];
+  const { data: cities, isPending: isCitiesPending } = useQuery({
+    queryKey: ["cities"],
+    queryFn: async () => {
+      const response = await provincesOrDistricts();
+      return response;
+    },
+  });
+
+  const { data: districts, isPending: isDistrictsPending } = useQuery({
+    queryKey: ["districts", selectedCityId],
+    queryFn: async () => {
+      if (!selectedCityId) return { data: [] };
+      const response = await provincesOrDistricts(selectedCityId);
+      return response;
+    },
+    enabled: !!selectedCityId,
+  });
+
+  console.log(cities);
+  console.log(districts);
 
   const { mutate: submitMutation, isPending } = useMutation({
     mutationFn: async (data: ApplicationForm) => await submit(data),
@@ -66,8 +85,9 @@ const ApplyForm = ({ address }: { address: boolean }) => {
       setShowSuccess(true);
     },
     onError: (error: CustomError) => {
-      const errorMessage = error.info?.message || error.message || "Bir hata oluştu";
-      
+      const errorMessage =
+        error.info?.message || error.message || "Bir hata oluştu";
+
       if (error.info?.status === 401 || error.info?.status === 403) {
         toast.error(errorMessage);
       } else if (error.info?.status === 0 || error.info?.status === 404) {
@@ -80,10 +100,9 @@ const ApplyForm = ({ address }: { address: boolean }) => {
     },
   });
 
-
-
-  const handleCityChange = (cityName: string): void => {
+  const handleCityChange = (cityId: number, cityName: string): void => {
     setSelectedCity(cityName);
+    setSelectedCityId(cityId);
     form.setValue("province", cityName);
     form.setValue("district", "");
   };
@@ -164,19 +183,30 @@ const ApplyForm = ({ address }: { address: boolean }) => {
                     form={form}
                     name="province"
                     label="İl"
-                    placeholder="İl Seçiniz"
+                    placeholder={isCitiesPending ? "Yükleniyor..." : "İl Seçiniz"}
                     icon={<Icons.location />}
-                    data={cities}
-                    onSelect={(cityName) => handleCityChange(cityName)}
+                    data={cities?.data?.map((city: any) => ({
+                      value: city.provincesId,
+                      label: city.provincesName,
+                    })) || []}
+                    onSelect={(cityIdStr) => {
+                      const cityId = Number(cityIdStr);
+                      const city = cities?.data?.find((c: any) => c.provincesId === cityId);
+                      handleCityChange(cityId, city?.provincesName || "");
+                    }}
+                    disabled={isCitiesPending}
                   />
                   <CommandMenu
                     form={form}
                     name="district"
                     label="İlçe"
-                    placeholder={selectedCity ? "İlçe Seçiniz" : "Önce il seçiniz"}
+                    placeholder={isDistrictsPending ? "Yükleniyor..." : (selectedCity ? "İlçe Seçiniz" : "Önce il seçiniz")}
                     icon={<Icons.location />}
-                    data={districts}
-                    disabled={!selectedCity}
+                    data={districts?.data?.map((district: any) => ({
+                      value: district.districtId,
+                      label: district.districtName,
+                    })) || []}
+                    disabled={!selectedCityId || isDistrictsPending}
                   />
                 </>
               )}

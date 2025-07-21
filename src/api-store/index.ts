@@ -34,7 +34,7 @@ interface API_PROPS {
     | "text/plain";
   data?: RecordType | undefined;
   params?: Record<string, any> | URLSearchParams | undefined;
-  token?: string;
+  headers?: Record<string, string>;
 }
 
 export async function api({
@@ -43,16 +43,14 @@ export async function api({
   contentType = "application/json",
   data = undefined,
   params = {},
-  token,
+  headers = {},
 }: API_PROPS): Promise<ApiResponse> {
-  const jwtToken = token || "";
-
   const config: AxiosRequestConfig = {
     url: `${SERVICE_URL}${path}`,
     method,
     headers: {
       "Content-Type": contentType,
-      Authorization: jwtToken ? `Bearer ${jwtToken}` : "",
+      ...headers,
     },
     params: removeUndefined(params),
     data,
