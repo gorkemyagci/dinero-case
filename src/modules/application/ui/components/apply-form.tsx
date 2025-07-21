@@ -199,7 +199,7 @@ const ApplyForm = ({ address }: { address: boolean }) => {
                     placeholder={isDistrictsPending ? "Yükleniyor..." : (selectedCity ? "İlçe Seçiniz" : "Önce il seçiniz")}
                     icon={<Icons.location />}
                     data={districts?.data?.map((district: any) => ({
-                      value: district.districtId,
+                      value: String(district.districtId),
                       label: district.districtName,
                     })) || []}
                     disabled={!selectedCityId || isDistrictsPending}
