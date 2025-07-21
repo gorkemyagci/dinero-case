@@ -25,6 +25,7 @@ export class CustomError extends Error {
 }
 
 interface API_PROPS {
+  baseURL?: string;
   path: string;
   method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   contentType?:
@@ -38,6 +39,7 @@ interface API_PROPS {
 }
 
 export async function api({
+  baseURL,
   path,
   method = "GET",
   contentType = "application/json",
@@ -46,7 +48,7 @@ export async function api({
   headers = {},
 }: API_PROPS): Promise<ApiResponse> {
   const config: AxiosRequestConfig = {
-    url: `${SERVICE_URL}${path}`,
+    url: `${baseURL || SERVICE_URL}${path}`,
     method,
     headers: {
       "Content-Type": contentType,
